@@ -1,13 +1,16 @@
 <?php
-namespace Avatar;
+namespace MediaWiki\Extension\Avatar;
 
+use Skin;
+use SpecialPage;
+use BaseTemplate;
 use MediaWiki\MediaWikiServices;
 
 class Hooks {
 
 	public static function onGetPreferences(\User $user, &$preferences) {
 		$link = MediaWikiServices::getInstance()->getLinkRenderer()
-			->makeLink(\SpecialPage::getTitleFor("UploadAvatar"), wfMessage('uploadavatar')->text());
+			->makeLink(SpecialPage::getTitleFor("UploadAvatar"), wfMessage('uploadavatar')->text());
 
 		$preferences['editavatar'] = array(
 			'type' => 'info',
@@ -20,20 +23,20 @@ class Hooks {
 		return true;
 	}
 	
-	public static function onSidebarBeforeOutput(\Skin $skin, &$sidebar) {
+	public static function onSidebarBeforeOutput(Skin $skin, &$sidebar) {
 		$user = $skin->getRelevantUser();
 		
 		if ($user) {
 			$sidebar['TOOLBOX'][] = [
 				'text' => wfMessage('sidebar-viewavatar')->text(),
-				'href' => \SpecialPage::getTitleFor('ViewAvatar')->getLocalURL(array(
+				'href' => SpecialPage::getTitleFor('ViewAvatar')->getLocalURL(array(
 					'user' => $user->getName(),
 				)),
 			];
 		}
 	}
 
-	public static function onBaseTemplateToolbox(\BaseTemplate &$baseTemplate, array &$toolbox) {
+	public static function onBaseTemplateToolbox(BaseTemplate &$baseTemplate, array &$toolbox) {
 		if (isset($baseTemplate->data['nav_urls']['viewavatar'])
 			&& $baseTemplate->data['nav_urls']['viewavatar']) {
 			$toolbox['viewavatar'] = $baseTemplate->data['nav_urls']['viewavatar'];

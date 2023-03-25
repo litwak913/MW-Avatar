@@ -1,7 +1,9 @@
 <?php
-namespace Avatar;
+namespace MediaWiki\Extension\Avatar;
 
-class Thumbnail {
+use Exception;
+
+class AvatarThumbnail {
 
 	private $image;
 	public $width;
@@ -46,7 +48,7 @@ class Thumbnail {
 		imagecopyresampled($thumb, $this->image, 0, 0, 0, 0, $dimension, $dimension, $this->width, $this->height);
 
 		if (!imagepng($thumb, $file)) {
-			throw new \Exception('Failed to save image ' . $file);
+			throw new Exception('Failed to save image ' . $file);
 		}
 
 		imagedestroy($thumb);

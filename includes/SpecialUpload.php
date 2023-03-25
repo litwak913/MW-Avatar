@@ -1,9 +1,16 @@
 <?php
-namespace Avatar;
+namespace MediaWiki\Extension\Avatar;
+
+use UserBlockedError;
+use Xml;
+use PermissionsError;
+use SpecialPage;
+use Html;
+use ManualLogEntry;
 
 use MediaWiki\MediaWikiServices;
 
-class SpecialUpload extends \SpecialPage {
+class SpecialUpload extends SpecialPage {
 
 	public function __construct() {
 		parent::__construct('UploadAvatar');
@@ -17,11 +24,11 @@ class SpecialUpload extends \SpecialPage {
 		$request = $this->getRequest();
 
 		if ($this->getUser()->getBlock()) {
-			throw new \UserBlockedError($this->getUser()->getBlock());
+			throw new UserBlockedError($this->getUser()->getBlock());
 		}
 
 		if (!MediaWikiServices::getInstance()->getPermissionManager()->userHasRight($this->getUser(), 'avatarupload')) {
-			throw new \PermissionsError('avatarupload');
+			throw new PermissionsError('avatarupload');
 		}
 
 		global $wgMaxAvatarResolution;
@@ -30,7 +37,7 @@ class SpecialUpload extends \SpecialPage {
 
 		if ($request->wasPosted()) {
 			if ($this->processUpload()) {
-				$this->getOutput()->redirect(\SpecialPage::getTitleFor('Preferences')->getLinkURL());
+				$this->getOutput()->redirect(SpecialPage::getTitleFor('Preferences')->getLinkURL());
 			}
 		} else {
 			$this->displayMessage('');
@@ -39,7 +46,7 @@ class SpecialUpload extends \SpecialPage {
 	}
 
 	private function displayMessage($msg) {
-		$this->getOutput()->addHTML(\Html::rawElement('div', array('class' => 'error', 'id' => 'errorMsg'), $msg));
+		$this->getOutput()->addHTML(Html::rawElement('div', array('class' => 'error', 'id' => 'errorMsg'), $msg));
 	}
 
 	private function processUpload() {
@@ -50,7 +57,7 @@ class SpecialUpload extends \SpecialPage {
 			return false;
 		}
 
-		$img = Thumbnail::open($dataurl);
+		$img = AvatarThumbnail::open($dataurl);
 
 		global $wgMaxAvatarResolution;
 
@@ -103,7 +110,7 @@ class SpecialUpload extends \SpecialPage {
 
 		global $wgAvatarLogInRC;
 
-		$logEntry = new \ManualLogEntry('avatar', 'upload');
+		$logEntry = new ManualLogEntry('avatar', 'upload');
 		$logEntry->setPerformer($this->getUser());
 		$logEntry->setTarget($this->getUser()->getUserPage());
 		$logId = $logEntry->insert();
@@ -114,17 +121,17 @@ class SpecialUpload extends \SpecialPage {
 
 	public function displayForm() {
 		$html = '<p></p>';
-		$html .= \Html::hidden('avatar', '');
+		$html .= Html::hidden('avatar', '');
 
-		$html .= \Xml::element('button', array('id' => 'pickfile'), $this->msg('uploadavatar-selectfile'));
+		$html .= Xml::element('button', array('id' => 'pickfile'), $this->msg('uploadavatar-selectfile'));
 
 		$html .= ' ';
 
 		// Submit button
-		$html .= \Xml::submitButton($this->msg('uploadavatar-submit')->text());
+		$html .= Xml::submitButton($this->msg('uploadavatar-submit')->text());
 
 		// Wrap with a form
-		$html = \Xml::tags('form', array('action' => $this->getPageTitle()->getLinkURL(), 'method' => 'post'), $html);
+		$html = Xml::tags('form', array('action' => $this->getPageTitle()->getLinkURL(), 'method' => 'post'), $html);
 
 		$this->getOutput()->addWikiMsg('uploadavatar-notice');
 		$this->getOutput()->addHTML($html);

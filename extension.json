@@ -15,12 +15,12 @@
 		]
 	},
 	"Hooks": {
-		"GetPreferences": "Avatar\\Hooks::onGetPreferences",
-		"BaseTemplateToolbox": "Avatar\\Hooks::onBaseTemplateToolbox",
-		"SidebarBeforeOutput": "Avatar\\Hooks::onSidebarBeforeOutput"
+		"GetPreferences": "MediaWiki\\Extension\\Avatar\\Hooks::onGetPreferences",
+		"BaseTemplateToolbox": "MediaWiki\\Extension\\Avatar\\Hooks::onBaseTemplateToolbox",
+		"SidebarBeforeOutput": "MediaWiki\\Extension\\Avatar\\Hooks::onSidebarBeforeOutput"
 	},
 	"ExtensionFunctions": [
-		"Avatar\\Hooks::onSetup"
+		"MediaWiki\\Extension\\Avatar\\Hooks::onSetup"
 	],
 	"ResourceModules": {
 		"ext.avatar.upload": {
@@ -42,20 +42,20 @@
 		}
 	},
 	"AutoloadClasses": {
-		"Avatar\\Hooks": "Hooks.php",
-		"Avatar\\Avatars": "Avatar_body.php",
-		"Avatar\\Thumbnail": "Thumbnail.php",
-		"Avatar\\SpecialUpload": "SpecialUpload.php",
-		"Avatar\\SpecialView": "SpecialView.php",
-		"Avatar\\UploadLogFormatter": "includes/UploadLogFormatter.php"
+		"MediaWiki\\Extension\\Avatar\\Hooks": "includes/Hooks.php",
+		"MediaWiki\\Extension\\Avatar\\Avatars": "includes/Avatar.php",
+		"MediaWiki\\Extension\\Avatar\\AvatarThumbnail": "includes/AvatarThumbnail.php",
+		"MediaWiki\\Extension\\Avatar\\SpecialUpload": "includes/SpecialUpload.php",
+		"MediaWiki\\Extension\\Avatar\\SpecialView": "includes/SpecialView.php",
+		"MediaWiki\\Extension\\Avatar\\UploadLogFormatter": "includes/UploadLogFormatter.php"
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
 		"remoteExtPath": "Avatar"
 	},
 	"SpecialPages": {
-		"UploadAvatar": "Avatar\\SpecialUpload",
-		"ViewAvatar": "Avatar\\SpecialView"
+		"UploadAvatar": "MediaWiki\\Extension\\Avatar\\SpecialUpload",
+		"ViewAvatar": "MediaWiki\\Extension\\Avatar\\SpecialView"
 	},
 	"AvailableRights": [
 		"avatarupload",
@@ -73,7 +73,7 @@
 		"avatar"
 	],
 	"LogActionsHandlers": {
-		"avatar/upload": "Avatar\\UploadLogFormatter",
+		"avatar/upload": "MediaWiki\\Extension\\Avatar\\UploadLogFormatter",
 		"avatar/delete": "LogFormatter"
 	},
 	"config": {

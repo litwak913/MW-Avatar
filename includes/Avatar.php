@@ -1,5 +1,5 @@
 <?php
-namespace Avatar;
+namespace MediaWiki\Extension\Avatar;
 
 class Avatars {
 
@@ -45,7 +45,7 @@ class Avatars {
 				// Dynamically generate upon request
 				$originalAvatarPath = "/{$user->getId()}/original.png";
 				if (file_exists($wgAvatarUploadDirectory . $originalAvatarPath)) {
-					$image = Thumbnail::open($wgAvatarUploadDirectory . $originalAvatarPath);
+					$image = AvatarThumbnail::open($wgAvatarUploadDirectory . $originalAvatarPath);
 					$image->createThumbnail($res, $wgAvatarUploadDirectory . $avatarPath);
 					$image->cleanup();
 					$path = $avatarPath;

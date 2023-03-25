@@ -1,6 +1,7 @@
 <?php
 namespace Avatar;
 
+use SpecialPage;
 use MediaWiki\MediaWikiServices;
 
 class UploadLogFormatter extends \LogFormatter {
@@ -8,7 +9,7 @@ class UploadLogFormatter extends \LogFormatter {
 	public function getActionLinks() {
 		$user = $this->entry->getPerformerIdentity();
 		$view = MediaWikiServices::getInstance()->getLinkRenderer()
-			->makeKnownLink(\SpecialPage::getTitleFor('ViewAvatar'),
+			->makeKnownLink(SpecialPage::getTitleFor('ViewAvatar'),
 				$this->msg('logentry-avatar-action-view')->escaped(),
 				[],
 				['user' => $user->getName()]
