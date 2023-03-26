@@ -7,9 +7,7 @@ use FormOptions;
 use PermissionsError;
 use ManualLogEntry;
 use SpecialPage;
-use OOUI;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Widget\UserInputWidget;
 
 class SpecialView extends SpecialPage {
 
@@ -63,7 +61,7 @@ class SpecialView extends SpecialPage {
 			}
 		}
 
-		$this->showFormNew($user);
+		$this->showForm($user);
 
 		if ($userExists) {
 			$haveAvatar = Avatars::hasAvatar($userObj);
@@ -86,37 +84,6 @@ class SpecialView extends SpecialPage {
 		} else if ($user) {
 			$this->getOutput()->addWikiMsg('viewavatar-nouser');
 		}
-	}
-	private function showFormNew($user) { 
-		$this->getOutput()->enableOOUI();
-		$this->getOutput()->addHTML( new OOUI\FormLayout( [
-			'method' => 'GET',
-			'action' => $this->getPageTitle()->getLinkURL(),
-			'items' => [
-				new OOUI\FieldsetLayout( [
-					'label' => $this->msg('viewavatar-legend')->text(),
-					'items' => [
-						new OOUI\ActionFieldLayout(
-							new UserInputWidget( [
-								'name' => 'user',
-								'placeholder' => $this->msg('viewavatar-username')->text()
-							] ),
-							new OOUI\ButtonInputWidget( [
-								'name' => 'login',
-								'label' => $this->msg('viewavatar-submit')->text(),
-								'type' => 'submit',
-								'flags' => [ 'primary', 'progressive' ],
-							] ),
-							[
-								'label' => null,
-								'align' => 'inline',
-							]
-						),
-					]
-				] )
-			]
-		] ) );
-		
 	}
 	private function showForm($user) {
 		$this->getOutput()->addModules(array('mediawiki.userSuggest'));
@@ -141,35 +108,6 @@ class SpecialView extends SpecialPage {
 		$html = Xml::tags('form', array('action' => $this->getPageTitle()->getLinkURL(), 'method' => 'get'), $html);
 
 		$this->getOutput()->addHTML($html);
-	}
-	private function showDeleteFormNew($user) {
-		$this->getOutput()->addHTML( new OOUI\FormLayout( [
-			'method' => 'GET',
-			'action' => $this->getPageTitle()->getLinkURL(),
-			'items' => [
-				new OOUI\FieldsetLayout( [
-					'label' => $this->msg('viewavatar-legend')->text(),
-					'items' => [
-						new OOUI\ActionFieldLayout(
-							new OOUI\TextInputWidget( [
-								'name' => 'reason',
-								'placeholder' => $this->msg('viewavatar-delete-reason')->text()
-							] ),
-							new OOUI\ButtonInputWidget( [
-								'name' => 'login',
-								'label' => $this->msg('viewavatar-delete-submit')->text(),
-								'type' => 'submit',
-								'flags' => [ 'primary', 'progressive' ],
-							] ),
-							[
-								'label' => null,
-								'align' => 'inline',
-							]
-						),
-					]
-				] )
-			]
-		] ) );
 	}
 	private function showDeleteForm($user) {
 		$html = Html::hidden('delete', 'true');

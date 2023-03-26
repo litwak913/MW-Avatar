@@ -1,6 +1,7 @@
 <?php
 namespace MediaWiki\Extension\Avatar;
 
+use User;
 class Avatars {
 
 	public static function getLinkFor($username, $res = false) {
@@ -29,7 +30,7 @@ class Avatars {
 		return 'original';
 	}
 
-	public static function getAvatar(\User $user, $res) {
+	public static function getAvatar(User $user, $res) {
 		global $wgDefaultAvatarRes;
 		$path = null;
 
@@ -56,12 +57,12 @@ class Avatars {
 		return $path;
 	}
 
-	public static function hasAvatar(\User $user) {
+	public static function hasAvatar(User $user) {
 		global $wgDefaultAvatar;
 		return self::getAvatar($user, 'original') !== null;
 	}
 
-	public static function deleteAvatar(\User $user) {
+	public static function deleteAvatar(User $user) {
 		global $wgAvatarUploadDirectory;
 		$dirPath = $wgAvatarUploadDirectory . "/{$user->getId()}/";
 		if (!is_dir($dirPath)) {
