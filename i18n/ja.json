@@ -27,7 +27,7 @@
 
 	"viewavatar": "アバターを検査",
 	"viewavatar-legend": "アバターを検査",
-	"viewavatar-username": "利用者名",
+	"viewavatar-username": "利用者名：",
 	"viewavatar-submit": "検査",
 	"viewavatar-delete-legend": "アバターを削除",
 	"viewavatar-delete-reason": "理由：",

@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Avatar;
 use Html;
 use Xml;
 use FormOptions;
+use HTMLForm;
 use PermissionsError;
 use ManualLogEntry;
 use SpecialPage;
@@ -19,7 +20,7 @@ class SpecialView extends SpecialPage {
 		// Shortcut by using $par
 		if ($par) {
 			$this->getOutput()->redirect($this->getPageTitle()->getLinkURL(array(
-				'user' => $par,
+				'wpUsername' => $par,
 			)));
 			return;
 		}
@@ -29,20 +30,19 @@ class SpecialView extends SpecialPage {
 
 		// Parse options
 		$opt = new FormOptions;
-		$opt->add('user', '');
-		$opt->add('delete', '');
-		$opt->add('reason', '');
+		$opt->add('wpUsername', '');
+		$opt->add('wpDeleteReason', '');
 		$opt->fetchValuesFromRequest($this->getRequest());
 
 		// Parse user
-		$user = $opt->getValue('user');
+		$user = $opt->getValue('wpUsername');
 		$userObj = MediaWikiServices::getInstance()->getUserFactory()->newFromName($user);
 		//$userObj = \User::newFromName($user);
 		$userExists = $userObj && $userObj->getId() !== 0;
 
 		// If current task is delete and user is not allowed
 		$canDoAdmin = MediaWikiServices::getInstance()->getPermissionManager()->userHasRight($this->getUser(), 'avataradmin');
-		if ($opt->getValue('delete')) {
+		if (!empty($opt->getValue('wpDeleteReason'))) {
 			if (!$canDoAdmin) {
 				throw new PermissionsError('avataradmin');
 			}
@@ -54,7 +54,7 @@ class SpecialView extends SpecialPage {
 					$logEntry = new ManualLogEntry('avatar', 'delete');
 					$logEntry->setPerformer($this->getUser());
 					$logEntry->setTarget($userObj->getUserPage());
-					$logEntry->setComment($opt->getValue('reason'));
+					$logEntry->setComment($opt->getValue('wpDeleteReason'));
 					$logId = $logEntry->insert();
 					$logEntry->publish($logId, $wgAvatarLogInRC ? 'rcandudp' : 'udp');
 				}
@@ -85,52 +85,40 @@ class SpecialView extends SpecialPage {
 			$this->getOutput()->addWikiMsg('viewavatar-nouser');
 		}
 	}
-	private function showForm($user) {
-		$this->getOutput()->addModules(array('mediawiki.userSuggest'));
-		$html = Xml::inputLabel(
-			$this->msg('viewavatar-username')->text(),
-			'user',
-			'',
-			45,
-			$user,
-			array('class' => 'mw-autocomplete-user') # This together with mediawiki.userSuggest will give us an auto completion
-		);
-
-		$html .= ' ';
-
-		// Submit button
-		$html .= Xml::submitButton($this->msg('viewavatar-submit')->text());
-
-		// Fieldset
-		$html = Xml::fieldset($this->msg('viewavatar-legend')->text(), $html);
-
-		// Wrap with a form
-		$html = Xml::tags('form', array('action' => $this->getPageTitle()->getLinkURL(), 'method' => 'get'), $html);
-
-		$this->getOutput()->addHTML($html);
+	private function showForm($user){
+		$formDescriptor = [
+			'user' => [
+				'label-message' => 'viewavatar-username',
+				'type' => 'user',
+				'name' => 'wpUsername',
+				'default' => $user
+			],
+		];
+		$form = HTMLForm::factory('ooui',$formDescriptor,$this->getContext());
+		$form
+			->setMethod('get')
+			->setWrapperLegendMsg("viewavatar-legend")
+			->prepareForm()
+			->displayForm(false);
 	}
-	private function showDeleteForm($user) {
-		$html = Html::hidden('delete', 'true');
-		$html .= Html::hidden('user', $user);
-
-		$html .= Xml::inputLabel(
-			$this->msg('viewavatar-delete-reason')->text(),
-			'reason',
-			'',
-			45
-		);
-
-		$html .= ' ';
-
-		// Submit button
-		$html .= Xml::submitButton($this->msg('viewavatar-delete-submit')->text());
-
-		// Fieldset
-		$html = Xml::fieldset($this->msg('viewavatar-delete-legend')->text(), $html);
-
-		// Wrap with a form
-		$html = Xml::tags('form', array('action' => $this->getPageTitle()->getLinkURL(), 'method' => 'get'), $html);
-
-		$this->getOutput()->addHTML($html);
+	private function showDeleteForm($user)
+	{
+		$formDescriptor = [
+			'user' => [
+				'type' => 'hidden',
+				'name' => 'wpUsername',
+				'default' => $user
+			],
+			'reason' => [
+				'label-message' => 'viewavatar-delete-reason',
+				'type' => 'text', // Input type
+				'name' => 'wpDeleteReason'
+			]
+		];
+		$deleteForm = HTMLForm::factory('ooui',$formDescriptor,$this->getContext());
+		$deleteForm
+			->setWrapperLegendMsg("viewavatar-delete-legend")
+			->prepareForm()
+			->displayForm(false);
 	}
 }

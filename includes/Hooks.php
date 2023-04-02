@@ -29,9 +29,9 @@ class Hooks {
 		if ($user) {
 			$sidebar['TOOLBOX'][] = [
 				'text' => wfMessage('sidebar-viewavatar')->text(),
-				'href' => SpecialPage::getTitleFor('ViewAvatar')->getLocalURL(array(
-					'user' => $user->getName(),
-				)),
+				'href' => SpecialPage::getTitleFor('ViewAvatar')->getLocalURL([
+					'wpUsername' => $user->getName(),
+				]),
 			];
 		}
 	}
