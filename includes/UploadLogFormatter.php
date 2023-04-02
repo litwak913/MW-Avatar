@@ -2,9 +2,10 @@
 namespace Avatar;
 
 use SpecialPage;
+use LogFormatter;
 use MediaWiki\MediaWikiServices;
 
-class UploadLogFormatter extends \LogFormatter {
+class UploadLogFormatter extends LogFormatter {
 
 	public function getActionLinks() {
 		$user = $this->entry->getPerformerIdentity();

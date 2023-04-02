@@ -1,7 +1,6 @@
 <?php
 namespace MediaWiki\Extension\Avatar;
 
-use Html;
 use Xml;
 use FormOptions;
 use HTMLForm;
@@ -48,7 +47,7 @@ class SpecialView extends SpecialPage {
 			}
 			// Delete avatar if the user exists
 			if ($userExists) {
-				if (Avatars::deleteAvatar($userObj)) {
+				if (Avatar::deleteAvatar($userObj)) {
 					global $wgAvatarLogInRC;
 
 					$logEntry = new ManualLogEntry('avatar', 'delete');
@@ -64,11 +63,11 @@ class SpecialView extends SpecialPage {
 		$this->showForm($user);
 
 		if ($userExists) {
-			$haveAvatar = Avatars::hasAvatar($userObj);
+			$haveAvatar = Avatar::hasAvatar($userObj);
 
 			if ($haveAvatar) {
 				$html = Xml::tags('img', array(
-					'src' => Avatars::getLinkFor($user, 'original') . '&nocache&ver=' . dechex(time()),
+					'src' => Avatar::getLinkFor($user, 'original') . '&nocache&ver=' . dechex(time()),
 					'height' => 400,
 				), '');
 				$html = Xml::tags('p', array(), $html);

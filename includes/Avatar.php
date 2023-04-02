@@ -2,8 +2,19 @@
 namespace MediaWiki\Extension\Avatar;
 
 use User;
-class Avatars {
+use SpecialPage;
+class Avatar {
 
+	public static function getLinkForNew($username, $res = false) {
+		$args =[
+			'wpUsername' => $username
+		];
+		$path = SpecialPage::getTitleFor('Avatar')->getLocalURL();
+		if ($res !== false) {
+			$args['wpRes'] = $res;
+		}
+		return SpecialPage::getTitleFor('Avatar')->getLocalURL($args);
+	}
 	public static function getLinkFor($username, $res = false) {
 		global $wgScriptPath;
 		$path = "$wgScriptPath/extensions/Avatar/avatar.php?user=$username";

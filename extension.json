@@ -41,13 +41,8 @@
 			]
 		}
 	},
-	"AutoloadClasses": {
-		"MediaWiki\\Extension\\Avatar\\Hooks": "includes/Hooks.php",
-		"MediaWiki\\Extension\\Avatar\\Avatars": "includes/Avatar.php",
-		"MediaWiki\\Extension\\Avatar\\AvatarThumbnail": "includes/AvatarThumbnail.php",
-		"MediaWiki\\Extension\\Avatar\\SpecialUpload": "includes/SpecialUpload.php",
-		"MediaWiki\\Extension\\Avatar\\SpecialView": "includes/SpecialView.php",
-		"MediaWiki\\Extension\\Avatar\\UploadLogFormatter": "includes/UploadLogFormatter.php"
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\Avatar\\": "includes/"
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
@@ -55,7 +50,8 @@
 	},
 	"SpecialPages": {
 		"UploadAvatar": "MediaWiki\\Extension\\Avatar\\SpecialUpload",
-		"ViewAvatar": "MediaWiki\\Extension\\Avatar\\SpecialView"
+		"ViewAvatar": "MediaWiki\\Extension\\Avatar\\SpecialView",
+		"Avatar": "MediaWiki\\Extension\\Avatar\\SpecialAvatar"
 	},
 	"AvailableRights": [
 		"avatarupload",
