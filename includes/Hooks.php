@@ -16,7 +16,7 @@ class Hooks {
 			'type' => 'info',
 			'raw' => true,
 			'label-message' => 'prefs-editavatar',
-			'default' => '<img src="' . Avatar::getLinkFor($user->getName()) . '" width="32"></img> ' . $link,
+			'default' => '<img src="' . Avatar::getLinkForNew($user->getName()) . '" width="32"></img> ' . $link,
 			'section' => 'personal/info',
 		);
 
