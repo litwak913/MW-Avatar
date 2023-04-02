@@ -22,7 +22,7 @@ var container = $('<div class="cropper-container" disabled=""/>');
 var imageObj = $('<img src=""></img>');
 var selector = $('<div class="cropper"><div class="tl-resizer"/><div class="tr-resizer"/><div class="bl-resizer"/><div class="br-resizer"/><div class="round-preview"/></div>');
 var msgBelow = $('<p>').text(mw.msg('uploadavatar-nofile'));
-var hiddenField = $('[name=avatar]');
+var hiddenField = $('[name=wpAvatar]');
 var pickfile = $('#pickfile');
 var errorMsg = $('#errorMsg');
 var roundPreview = selector.find('.round-preview');

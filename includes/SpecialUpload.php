@@ -51,7 +51,7 @@ class SpecialUpload extends SpecialPage {
 
 	private function processUpload() {
 		$request = $this->getRequest();
-		$dataurl = $request->getVal('avatar');
+		$dataurl = $request->getVal('wpAvatar');
 		if (!$dataurl || parse_url($dataurl, PHP_URL_SCHEME) !== 'data') {
 			$this->displayMessage($this->msg('avatar-notuploaded'));
 			return false;
@@ -121,7 +121,7 @@ class SpecialUpload extends SpecialPage {
 
 	public function displayForm() {
 		$html = '<p></p>';
-		$html .= Html::hidden('avatar', '');
+		$html .= Html::hidden('wpAvatar', '');
 
 		$html .= Xml::element('button', array('id' => 'pickfile'), $this->msg('uploadavatar-selectfile'));
 
