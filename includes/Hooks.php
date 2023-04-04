@@ -4,6 +4,7 @@ namespace MediaWiki\Extension\Avatar;
 use Skin;
 use SpecialPage;
 use BaseTemplate;
+use Html;
 use MediaWiki\MediaWikiServices;
 
 class Hooks {
@@ -11,12 +12,12 @@ class Hooks {
 	public static function onGetPreferences(\User $user, &$preferences) {
 		$link = MediaWikiServices::getInstance()->getLinkRenderer()
 			->makeLink(SpecialPage::getTitleFor("UploadAvatar"), wfMessage('uploadavatar')->text());
-
+		$html=Html::element('img',['src'=>Avatar::getLinkForNew($user->getName()),'width'=>'32']);
 		$preferences['editavatar'] = array(
 			'type' => 'info',
 			'raw' => true,
 			'label-message' => 'prefs-editavatar',
-			'default' => '<img src="' . Avatar::getLinkForNew($user->getName()) . '" width="32"></img> ' . $link,
+			'default' => $html . $link,
 			'section' => 'personal/info',
 		);
 

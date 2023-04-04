@@ -1,23 +1,23 @@
 <?php
 $specialPageAliases = [];
 
-$specialPageAliases['en'] = array(
-	'UploadAvatar' => array('UploadAvatar'),
-	'ViewAvatar' => array('ViewAvatar'),
+$specialPageAliases['en'] = [
+	'UploadAvatar' => ['UploadAvatar'],
+	'ViewAvatar' => ['ViewAvatar'],
 	'Avatar' => ['Avatar']
-);
+];
 
-$specialPageAliases['zh-hans'] = array(
-	'UploadAvatar' => array('上传头像'),
-	'ViewAvatar' => array('查看头像'),
-);
+$specialPageAliases['zh-hans'] = [
+	'UploadAvatar' => ['上传头像'],
+	'ViewAvatar' => ['查看头像'],
+];
 
-$specialPageAliases['zh-hant'] = array(
-	'UploadAvatar' => array('上傳頭像'),
-	'ViewAvatar' => array('檢視頭像'),
-);
+$specialPageAliases['zh-hant'] = [
+	'UploadAvatar' => ['上傳頭像'],
+	'ViewAvatar' => ['檢視頭像'],
+];
 
-$specialPageAliases['ja'] = array(
-	'UploadAvatar' => array('アバターをアップロード'),
-	'ViewAvatar' => array('アバターを検査'),
-);
+$specialPageAliases['ja'] = [
+	'UploadAvatar' => ['アバターをアップロード'],
+	'ViewAvatar' => ['アバターを検査'],
+];

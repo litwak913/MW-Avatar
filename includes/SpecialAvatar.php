@@ -30,6 +30,8 @@ class SpecialAvatar extends UnlistedSpecialPage {
         }
         $response = $wgRequest->response();
         if ($path === null) {
+            global $wgDefaultAvatar;
+            if($wgDefaultAvatar !== 'IDENTICON'){
             // We use send custom header, in order to control cache
             $response->statusHeader('302');
         
@@ -38,10 +40,10 @@ class SpecialAvatar extends UnlistedSpecialPage {
                 // As it is unlikely to be deleted
                 $response->header('Cache-Control: public, max-age=3600');
             }
-        
-            global $wgDefaultAvatar;
             $response->header('Location: ' . $wgDefaultAvatar);
-            return;
+            return;}else{
+                $path = Avatar::createIdenticon($user,$res);
+            }
         }
         global $wgAvatarServingMethod;
         switch($wgAvatarServingMethod) {
