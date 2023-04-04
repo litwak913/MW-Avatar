@@ -1,9 +1,10 @@
 <?php
-$specialPageAliases = array();
+$specialPageAliases = [];
 
 $specialPageAliases['en'] = array(
 	'UploadAvatar' => array('UploadAvatar'),
 	'ViewAvatar' => array('ViewAvatar'),
+	'Avatar' => ['Avatar']
 );
 
 $specialPageAliases['zh-hans'] = array(

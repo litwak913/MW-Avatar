@@ -41,6 +41,7 @@ class SpecialAvatar extends UnlistedSpecialPage {
         
             global $wgDefaultAvatar;
             $response->header('Location: ' . $wgDefaultAvatar);
+            return;
         }
         global $wgAvatarServingMethod;
         switch($wgAvatarServingMethod) {

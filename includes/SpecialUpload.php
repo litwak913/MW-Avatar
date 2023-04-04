@@ -9,8 +9,9 @@ use Html;
 use ManualLogEntry;
 
 use MediaWiki\MediaWikiServices;
+use UnlistedSpecialPage;
 
-class SpecialUpload extends SpecialPage {
+class SpecialUpload extends UnlistedSpecialPage {
 
 	public function __construct() {
 		parent::__construct('UploadAvatar');
@@ -133,11 +134,7 @@ class SpecialUpload extends SpecialPage {
 		// Wrap with a form
 		$html = Xml::tags('form', array('action' => $this->getPageTitle()->getLinkURL(), 'method' => 'post'), $html);
 
-		$this->getOutput()->addWikiMsg('uploadavatar-notice');
+		$this->getOutput()->addWikiMsg('clearyourcache');
 		$this->getOutput()->addHTML($html);
-	}
-
-	public function isListed() {
-		return false;
 	}
 }

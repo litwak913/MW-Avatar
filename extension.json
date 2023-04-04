@@ -69,7 +69,7 @@
 		"avatar"
 	],
 	"LogActionsHandlers": {
-		"avatar/upload": "MediaWiki\\Extension\\Avatar\\UploadLogFormatter",
+		"avatar/upload": "MediaWiki\\Extension\\Avatar\\AvatarUploadLogFormatter",
 		"avatar/delete": "LogFormatter"
 	},
 	"config": {
