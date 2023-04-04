@@ -1,40 +1,31 @@
 <?php
 namespace MediaWiki\Extension\Avatar;
 
-use User;
 use Identicon;
 use SpecialPage;
+use User;
+
 class Avatar {
 
-	public static function getLinkForNew($username, $res = false) {
-		$args =[
+	public static function getLinkFor( $username, $res = false ) {
+		$args = [
 			'wpUsername' => $username
 		];
-		$path = SpecialPage::getTitleFor('Avatar')->getLocalURL();
-		if ($res !== false) {
+		if ( $res !== false ) {
 			$args['wpRes'] = $res;
 		}
-		return SpecialPage::getTitleFor('Avatar')->getLocalURL($args);
-	}
-	public static function getLinkFor($username, $res = false) {
-		global $wgScriptPath;
-		$path = "$wgScriptPath/extensions/Avatar/avatar.php?user=$username";
-		if ($res !== false) {
-			return $path . '&res=' . $res;
-		} else {
-			return $path;
-		}
+		return SpecialPage::getTitleFor( 'Avatar' )->getLocalURL( $args );
 	}
 
-	public static function normalizeResolution($res) {
-		if ($res === 'original') {
+	public static function normalizeResolution( $res ) {
+		if ( $res === 'original' ) {
 			return 'original';
 		}
-		$res = intval($res);
+		$res = intval( $res );
 
 		global $wgAllowedAvatarRes;
-		foreach ($wgAllowedAvatarRes as $r) {
-			if ($res <= $r) {
+		foreach ( $wgAllowedAvatarRes as $r ) {
+			if ( $res <= $r ) {
 				return $r;
 			}
 		}
@@ -42,24 +33,23 @@ class Avatar {
 		return 'original';
 	}
 
-	public static function getAvatar(User $user, $res) {
-		global $wgDefaultAvatarRes;
+	public static function getAvatar( User $user, $res ) {
 		$path = null;
 
 		// If user exists
-		if ($user && $user->getId()) {
+		if ( $user && $user->getId() ) {
 			global $wgAvatarUploadDirectory;
 			$avatarPath = "/{$user->getId()}/$res.png";
 
 			// Check if requested avatar thumbnail exists
-			if (file_exists($wgAvatarUploadDirectory . $avatarPath)) {
+			if ( file_exists( $wgAvatarUploadDirectory . $avatarPath ) ) {
 				$path = $avatarPath;
-			} else if ($res !== 'original') {
+			} elseif ( $res !== 'original' ) {
 				// Dynamically generate upon request
 				$originalAvatarPath = "/{$user->getId()}/original.png";
-				if (file_exists($wgAvatarUploadDirectory . $originalAvatarPath)) {
-					$image = AvatarThumbnail::open($wgAvatarUploadDirectory . $originalAvatarPath);
-					$image->createThumbnail($res, $wgAvatarUploadDirectory . $avatarPath);
+				if ( file_exists( $wgAvatarUploadDirectory . $originalAvatarPath ) ) {
+					$image = AvatarThumbnail::open( $wgAvatarUploadDirectory . $originalAvatarPath );
+					$image->createThumbnail( $res, $wgAvatarUploadDirectory . $avatarPath );
 					$image->cleanup();
 					$path = $avatarPath;
 				}
@@ -69,33 +59,34 @@ class Avatar {
 		return $path;
 	}
 
-	public static function hasAvatar(User $user) {
-		global $wgDefaultAvatar;
-		return self::getAvatar($user, 'original') !== null;
+	public static function hasAvatar( User $user ) {
+		return self::getAvatar( $user, 'original' ) !== null;
 	}
-	public static function createIdenticon(User $user,$res){
+
+	public static function createIdenticon( User $user, $res ) {
 		global $wgMaxAvatarResolution;
 		global $wgAvatarUploadDirectory;
 		$uploadDir = $wgAvatarUploadDirectory . '/' . $user->getId() . '/';
-		@mkdir($uploadDir, 0755, true);
-		$identicon = new Identicon\Identicon(new Identicon\Generator\GdGenerator());
-		$dataurl = $identicon->getImageDataUri($user->getName(),$wgMaxAvatarResolution,null,'#ffffff');
-		$img = AvatarThumbnail::open($dataurl);
-		$img->createThumbnail($wgMaxAvatarResolution, $uploadDir . 'original.png');
-		$img->createThumbnail($res, $uploadDir . $res.'.png');
+		@mkdir( $uploadDir, 0755, true );
+		$identicon = new Identicon\Identicon( new Identicon\Generator\GdGenerator() );
+		$dataurl = $identicon->getImageDataUri( $user->getName(), $wgMaxAvatarResolution, null, '#ffffff' );
+		$img = AvatarThumbnail::open( $dataurl );
+		$img->createThumbnail( $wgMaxAvatarResolution, $uploadDir . 'original.png' );
+		$img->createThumbnail( $res, $uploadDir . $res . '.png' );
 		return "/{$user->getId()}/$res.png";
 	}
-	public static function deleteAvatar(User $user) {
+
+	public static function deleteAvatar( User $user ) {
 		global $wgAvatarUploadDirectory;
 		$dirPath = $wgAvatarUploadDirectory . "/{$user->getId()}/";
-		if (!is_dir($dirPath)) {
+		if ( !is_dir( $dirPath ) ) {
 			return false;
 		}
-		$files = glob($dirPath . '*', GLOB_MARK);
-		foreach ($files as $file) {
-			unlink($file);
+		$files = glob( $dirPath . '*', GLOB_MARK );
+		foreach ( $files as $file ) {
+			unlink( $file );
 		}
-		rmdir($dirPath);
+		rmdir( $dirPath );
 		return true;
 	}
 
