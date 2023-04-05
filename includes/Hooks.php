@@ -4,6 +4,8 @@ namespace MediaWiki\Extension\Avatar;
 use BaseTemplate;
 use Html;
 use MediaWiki\MediaWikiServices;
+use Parser;
+use PPFrame;
 use Skin;
 use SpecialPage;
 
@@ -22,6 +24,18 @@ class Hooks {
 		];
 
 		return true;
+	}
+
+	public static function onParserFirstCallInit( $parser ) {
+		$parser->setHook( 'avatar', [ self::class,'renderTagAvatar' ] );
+	}
+
+	public static function renderTagAvatar( $input, array $args, Parser $parser, PPFrame $frame ) {
+		global $wgDefaultAvatarRes;
+		return Html::element( 'img', [
+			'src' => Avatar::getLinkFor( $args['username'] ),
+			'width' => $args['width'] ?? $wgDefaultAvatarRes
+		] );
 	}
 
 	public static function onSidebarBeforeOutput( Skin $skin, &$sidebar ) {
