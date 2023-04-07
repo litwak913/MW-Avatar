@@ -16,14 +16,14 @@ var startX;
 var startY;
 
 // Objects
-var submitButton = $('[type=submit]');
+var submitButton = OO.ui.infuse( $( '#submit-button' ) );
 var currentAvatar = $('<div>').append($('<img class="current-avatar">').attr('src', mw.config.get('wgScriptPath') + '/index.php?title=Special:Avatar&wpUsername=' + mw.user.id() + '&wpRes=original&wpNocache&wpVer=' + Math.floor(Date.now()/1000).toString(16)));
 var container = $('<div class="cropper-container" disabled=""/>');
 var imageObj = $('<img src=""></img>');
 var selector = $('<div class="cropper"><div class="tl-resizer"/><div class="tr-resizer"/><div class="bl-resizer"/><div class="br-resizer"/><div class="round-preview"/></div>');
 var msgBelow = $('<p>').text(mw.msg('uploadavatar-nofile'));
 var hiddenField = $('[name=wpAvatar]');
-var pickfile = $('#pickfile');
+var pickfile = OO.ui.infuse( $( '#select-button' ) );
 var errorMsg = $('#errorMsg');
 var roundPreview = selector.find('.round-preview');
 
@@ -206,14 +206,14 @@ function onImageLoaded() {
     container.attr('disabled', '');
     currentAvatar.show();
     msgBelow.text(mw.msg('uploadavatar-nofile'));
-    submitButton.attr('disabled', '');
+    submitButton.setDisabled(true)
     return;
   }
 
   errorMsg.text('');
 
   container.removeAttr('disabled');
-  submitButton.removeAttr('disabled');
+  submitButton.setDisabled(false);
   currentAvatar.hide();
   msgBelow.text(mw.msg('uploadavatar-hint'));
   visualHeight = height;
@@ -246,7 +246,7 @@ function onImageLoadingFailed() {
   errorMsg.text(mw.msg('avatar-invalid'));
   imageObj.attr('src', '');
   container.attr('disabled', '');
-  submitButton.attr('disabled', '');
+  submitButton.setDisabled(true)
   currentAvatar.show();
   msgBelow.text(mw.msg('uploadavatar-nofile'));
   return;
@@ -274,7 +274,7 @@ selector.find('.br-resizer').on('mousedown', function(event) {
   onDragStart(event);
 });
 
-pickfile.click(function(event) {
+pickfile.on('click',function() {
   var picker = $('<input type="file"/>');
   picker.change(function(event) {
     var file = event.target.files[0];
@@ -288,7 +288,7 @@ pickfile.click(function(event) {
     }
   });
   picker.click();
-  event.preventDefault();
+  //event.preventDefault();
 });
 
 imageObj
@@ -297,7 +297,7 @@ imageObj
 
 
 // UI modification
-submitButton.attr('disabled', '');
+submitButton.setDisabled(true);
 container.append(imageObj);
 container.append(selector);
 hiddenField.before(currentAvatar);

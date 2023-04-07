@@ -9,6 +9,7 @@ use SpecialPage;
 use UnlistedSpecialPage;
 use UserBlockedError;
 use Xml;
+use OOUI;
 
 class SpecialUpload extends UnlistedSpecialPage {
 
@@ -42,7 +43,7 @@ class SpecialUpload extends UnlistedSpecialPage {
 		} else {
 			$this->displayMessage( '' );
 		}
-		$this->displayForm();
+		$this->displayNewForm();
 	}
 
 	private function displayMessage( $msg ) {
@@ -118,7 +119,29 @@ class SpecialUpload extends UnlistedSpecialPage {
 
 		return true;
 	}
+	public function displayNewForm()
+	{
+		$this->getOutput()->enableOOUI();
+		$btnSelect = new OOUI\ButtonWidget( [
+			'infusable' => true,
+			'label' => $this->msg( 'uploadavatar-selectfile' )->text(),
+			'id' => 'select-button',
+			//'icon'=> 'upload'
+		] );
+		$btnSubmit = new OOUI\ButtonInputWidget( [
+			'type' => 'submit',
+			'infusable' => true,
+			'id' => 'submit-button',
+			'label' => $this->msg( 'uploadavatar-submit' )->text(),
+		] );
+		$html = '<p></p>';
+		$html .= Html::hidden( 'wpAvatar', '' );
+		$html .= $btnSelect . $btnSubmit;
+		$html = Xml::tags( 'form', [ 'action' => $this->getPageTitle()->getLinkURL(), 'method' => 'post' ], $html );
+		$this->getOutput()->addWikiMsg( 'clearyourcache' );
+		$this->getOutput()->addHTML( $html );
 
+	}
 	public function displayForm() {
 		$html = '<p></p>';
 		$html .= Html::hidden( 'wpAvatar', '' );
