@@ -13,21 +13,38 @@ class SpecialAvatar extends UnlistedSpecialPage {
 		$config = $this->getConfig();
 		$this->getOutput()->disable();
 		$query = $this->getRequest()->getQueryValues();
+		$response = $this->getRequest()->response();
+		if ( isset( $query['wpRes'] ) ) {
+			$res = Avatar::normalizeResolution( $query['wpRes'] );
+		} else {
+			$res = $config->get( 'DefaultAvatarRes' );
+		}
 		if ( isset( $query['wpUsername'] ) ) {
 			$username = $query['wpUsername'];
-
-			if ( isset( $query['wpRes'] ) ) {
-				$res = Avatar::normalizeResolution( $query['wpRes'] );
-			} else {
-				$res = $config->get( 'DefaultAvatarRes' );
-			}
-
 			$user = MediaWikiServices::getInstance()->getUserFactory()->newFromName( $username );
-			if ( $user ) {
-				$path = Avatar::getAvatar( $user, $res );
+		} elseif ( isset( $query['wpUserID'] ) ) {
+			$id = $query['wpUserID'];
+			$user = MediaWikiServices::getInstance()->getUserFactory()->newFromId( $id );
+		} else {
+			wfHttpError( 400, 'Bad Request', 'Missing parameter wpUsername or wpUserID.' );
+			return;
+		}
+		if ( $user && $user->isAnon() ) {
+			$path = Avatar::getAvatar( $user, $res );
+		} else {
+			$anonAvatar = $config->get( "AnonymousAvatar" );
+			if ( $anonAvatar ) {
+				$response->statusHeader( '302' );
+				if ( !isset( $query['wpNocache'] ) ) {
+					$response->header( 'Cache-Control: public, max-age=3600' );
+				}
+				$response->header( 'Location: ' . $anonAvatar );
+				return;
+			} else {
+				wfHttpError( 404, 'Not Found', 'No such user.' );
+				return;
 			}
 		}
-		$response = $this->getRequest()->response();
 		if ( $path === null ) {
 			$defaultAvatar = $config->get( "DefaultAvatar" );
 			if ( $defaultAvatar !== 'IDENTICON' ) {
