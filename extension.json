@@ -26,7 +26,8 @@
 	"ResourceModules": {
 		"ext.avatar.upload": {
 			"dependencies": [
-				"mediawiki.user"
+				"mediawiki.user",
+				"oojs-ui-core"
 			],
 			"scripts":[
 				"assets/upload.js"
