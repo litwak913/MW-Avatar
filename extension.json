@@ -27,7 +27,8 @@
 		"ext.avatar.upload": {
 			"dependencies": [
 				"mediawiki.user",
-				"oojs-ui-core"
+				"oojs-ui-core",
+				"oojs-ui.styles.icons-content"
 			],
 			"scripts":[
 				"assets/upload.js"
