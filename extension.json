@@ -41,6 +41,10 @@
 				"avatar-toosmall",
 				"uploadavatar-nofile",
 				"uploadavatar-hint"
+			],
+			"targets": [
+				"mobile",
+				"desktop"
 			]
 		}
 	},
