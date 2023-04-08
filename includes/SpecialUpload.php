@@ -4,12 +4,12 @@ namespace MediaWiki\Extension\Avatar;
 use Html;
 use ManualLogEntry;
 use MediaWiki\MediaWikiServices;
+use OOUI;
 use PermissionsError;
 use SpecialPage;
 use UnlistedSpecialPage;
 use UserBlockedError;
 use Xml;
-use OOUI;
 
 class SpecialUpload extends UnlistedSpecialPage {
 
@@ -119,14 +119,14 @@ class SpecialUpload extends UnlistedSpecialPage {
 
 		return true;
 	}
-	public function displayNewForm()
-	{
+
+	public function displayNewForm() {
 		$this->getOutput()->enableOOUI();
 		$btnSelect = new OOUI\ButtonWidget( [
 			'infusable' => true,
 			'label' => $this->msg( 'uploadavatar-selectfile' )->text(),
 			'id' => 'select-button',
-			'icon'=> 'upload'
+			'icon' => 'upload'
 		] );
 		$btnSubmit = new OOUI\ButtonInputWidget( [
 			'type' => 'submit',
@@ -139,24 +139,6 @@ class SpecialUpload extends UnlistedSpecialPage {
 		$html .= Html::hidden( 'wpAvatar', '' );
 		$html .= $btnSelect . $btnSubmit;
 		$html = Xml::tags( 'form', [ 'action' => $this->getPageTitle()->getLinkURL(), 'method' => 'post' ], $html );
-		$this->getOutput()->addWikiMsg( 'clearyourcache' );
-		$this->getOutput()->addHTML( $html );
-
-	}
-	public function displayForm() {
-		$html = '<p></p>';
-		$html .= Html::hidden( 'wpAvatar', '' );
-
-		$html .= Xml::element( 'button', [ 'id' => 'pickfile' ], $this->msg( 'uploadavatar-selectfile' ) );
-
-		$html .= ' ';
-
-		// Submit button
-		$html .= Xml::submitButton( $this->msg( 'uploadavatar-submit' )->text() );
-
-		// Wrap with a form
-		$html = Xml::tags( 'form', [ 'action' => $this->getPageTitle()->getLinkURL(), 'method' => 'post' ], $html );
-
 		$this->getOutput()->addWikiMsg( 'clearyourcache' );
 		$this->getOutput()->addHTML( $html );
 	}

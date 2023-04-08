@@ -119,7 +119,7 @@ function onDragStart(event) {
   event.preventDefault();
   event.stopPropagation();
 
-  $('body').on('mousemove', onDrag).on('mouseup', onDragEnd);
+  $('body').on('pointermove', onDrag).on('pointerup', onDragEnd);
 }
 
 function onDrag(event) {
@@ -190,7 +190,7 @@ function onDrag(event) {
 }
 
 function onDragEnd(event) {
-  $('body').off('mousemove', onDrag).off('mouseup', onDragEnd);
+  $('body').off('pointermove', onDrag).off('pointerup', onDragEnd);
   event.preventDefault();
 
   updateHidden();
@@ -251,25 +251,27 @@ function onImageLoadingFailed() {
   msgBelow.text(mw.msg('uploadavatar-nofile'));
   return;
 }
-
+function processTouchEvent(event) {
+  event.preventDefault();
+}
 // Event registration
-selector.on('mousedown', function(event) {
+selector.on('pointerdown', function(event) {
   dragMode = 0;
   onDragStart(event);
-});
-selector.find('.tl-resizer').on('mousedown', function(event) {
+}).on('touchstart',processTouchEvent);
+selector.find('.tl-resizer').on('pointerdown', function(event) {
   dragMode = 1;
   onDragStart(event);
 });
-selector.find('.tr-resizer').on('mousedown', function(event) {
+selector.find('.tr-resizer').on('pointerdown', function(event) {
   dragMode = 2;
   onDragStart(event);
 });
-selector.find('.bl-resizer').on('mousedown', function(event) {
+selector.find('.bl-resizer').on('pointerdown', function(event) {
   dragMode = 3;
   onDragStart(event);
 });
-selector.find('.br-resizer').on('mousedown', function(event) {
+selector.find('.br-resizer').on('pointerdown', function(event) {
   dragMode = 4;
   onDragStart(event);
 });
