@@ -126,6 +126,7 @@ class SpecialUpload extends UnlistedSpecialPage {
 			'infusable' => true,
 			'label' => $this->msg( 'uploadavatar-selectfile' )->text(),
 			'id' => 'select-button',
+			'flags' => [ 'primary', 'progressive' ],
 			'icon' => 'upload'
 		] );
 		$btnSubmit = new OOUI\ButtonInputWidget( [
