@@ -18,6 +18,7 @@ class SpecialUpload extends UnlistedSpecialPage {
 	}
 
 	public function execute( $par ) {
+		$this->checkReadOnly();
 		$this->requireLogin( 'prefsnologintext2' );
 		$config = $this->getConfig();
 		$this->setHeaders();

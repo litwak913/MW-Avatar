@@ -75,7 +75,7 @@ class SpecialView extends SpecialPage {
 				$this->getOutput()->addHTML( $html );
 
 				// Add a delete button
-				if ( $canDoAdmin ) {
+				if ( $canDoAdmin && !MediaWikiServices::getInstance()->getReadOnlyMode()->isReadOnly() ) {
 					$this->showDeleteForm( $user );
 				}
 			} else {
