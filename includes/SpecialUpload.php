@@ -44,7 +44,7 @@ class SpecialUpload extends UnlistedSpecialPage {
 				$this->getOutput()->redirect( SpecialPage::getTitleFor( 'Preferences' )->getLinkURL() );
 			}
 		} else {
-			$this->displayMessage( '' );
+			//$this->displayMessage( '' );
 		}
 		$this->displayNewForm();
 	}
