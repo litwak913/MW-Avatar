@@ -8,6 +8,7 @@ use MediaWiki\MediaWikiServices;
 use PermissionsError;
 use SpecialPage;
 use Xml;
+use OOUI\MessageWidget;
 
 class SpecialView extends SpecialPage {
 
@@ -37,6 +38,7 @@ class SpecialView extends SpecialPage {
 		$user = $opt->getValue( 'wpUsername' );
 		$userObj = MediaWikiServices::getInstance()->getUserFactory()->newFromName( $user );
 		// $userObj = \User::newFromName($user);
+		$this->showForm( $user );
 		$userExists = $userObj && $userObj->getId() !== 0;
 
 		// If current task is delete and user is not allowed
@@ -49,19 +51,18 @@ class SpecialView extends SpecialPage {
 			// Delete avatar if the user exists
 			if ( $userExists ) {
 				if ( Avatar::deleteAvatar( $userObj ) ) {
+					$this->displayMessage($this->msg( 'viewavatar-delete-done',$userObj->getName() ),'success');
 					$logInRC = $this->getConfig()->get( 'AvatarLogInRC' );
-
 					$logEntry = new ManualLogEntry( 'avatar', 'delete' );
 					$logEntry->setPerformer( $this->getUser() );
 					$logEntry->setTarget( $userObj->getUserPage() );
 					$logEntry->setComment( $opt->getValue( 'wpDeleteReason' ) );
 					$logId = $logEntry->insert();
 					$logEntry->publish( $logId, $logInRC ? 'rcandudp' : 'udp' );
+					return;
 				}
 			}
 		}
-
-		$this->showForm( $user );
 
 		if ( $userExists ) {
 			$haveAvatar = Avatar::hasAvatar( $userObj );
@@ -79,10 +80,10 @@ class SpecialView extends SpecialPage {
 					$this->showDeleteForm( $user );
 				}
 			} else {
-				$this->getOutput()->addWikiMsg( 'viewavatar-noavatar' );
+				$this->displayMessage($this->msg( 'viewavatar-noavatar' )->text(),'warning');
 			}
 		} elseif ( $user ) {
-			$this->getOutput()->addWikiMsg( 'viewavatar-nouser' );
+			$this->displayMessage($this->msg( 'viewavatar-nouser' )->text(),'warning');
 		}
 	}
 
@@ -121,5 +122,9 @@ class SpecialView extends SpecialPage {
 			->setWrapperLegendMsg( "viewavatar-delete-legend" )
 			->prepareForm()
 			->displayForm( false );
+	}
+	private function displayMessage( $msg ,$type) {
+		$message=new MessageWidget(['type'=>$type,'label'=>$msg]);
+		$this->getOutput()->addHTML( $message );
 	}
 }

@@ -21,12 +21,15 @@ class SpecialAvatar extends UnlistedSpecialPage {
 		}
 		if ( isset( $query['wpUsername'] ) ) {
 			$username = $query['wpUsername'];
-			$user = MediaWikiServices::getInstance()->getUserFactory()->newFromName( $username );
+			$user = MediaWikiServices::getInstance()->getUserIdentityLookup()->getUserIdentityByName($username);
+		} elseif (isset( $query['wpUserID'] )){
+			$uid = $query['wpUserID'];
+			$user = MediaWikiServices::getInstance()->getUserIdentityLookup()->getUserIdentityByUserId($uid);
 		} else {
-			wfHttpError( 400, 'Bad Request', 'Missing parameter wpUsername.' );
+			wfHttpError( 400, 'Bad Request', 'Missing parameter wpUsername or wpUserID.' );
 			return;
 		}
-		if ( $user && !$user->isAnon() ) {
+		if ( $user !== null ) {
 			$path = Avatar::getAvatar( $user, $res );
 		} else {
 			$anonAvatar = $config->get( "AnonymousAvatar" );

@@ -5,6 +5,7 @@ use Html;
 use ManualLogEntry;
 use MediaWiki\MediaWikiServices;
 use OOUI;
+use OOUI\MessageWidget;
 use PermissionsError;
 use SpecialPage;
 use UnlistedSpecialPage;
@@ -23,6 +24,7 @@ class SpecialUpload extends UnlistedSpecialPage {
 		$config = $this->getConfig();
 		$this->setHeaders();
 		$this->outputHeader();
+		$this->getOutput()->enableOOUI();
 		$request = $this->getRequest();
 
 		if ( $this->getUser()->getBlock() ) {
@@ -48,7 +50,8 @@ class SpecialUpload extends UnlistedSpecialPage {
 	}
 
 	private function displayMessage( $msg ) {
-		$this->getOutput()->addHTML( Html::rawElement( 'div', [ 'class' => 'error', 'id' => 'errorMsg' ], $msg ) );
+		$message=new MessageWidget(['type'=>'error','label'=>$msg]);
+		$this->getOutput()->addHTML( $message );
 	}
 
 	private function processUpload() {
@@ -122,7 +125,6 @@ class SpecialUpload extends UnlistedSpecialPage {
 	}
 
 	public function displayNewForm() {
-		$this->getOutput()->enableOOUI();
 		$btnSelect = new OOUI\ButtonWidget( [
 			'infusable' => true,
 			'label' => $this->msg( 'uploadavatar-selectfile' )->text(),

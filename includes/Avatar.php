@@ -2,6 +2,7 @@
 namespace MediaWiki\Extension\Avatar;
 
 use Identicon;
+use MediaWiki\User\UserIdentity;
 use SpecialPage;
 use User;
 
@@ -33,7 +34,7 @@ class Avatar {
 		return 'original';
 	}
 
-	public static function getAvatar( User $user, $res ) {
+	public static function getAvatar( UserIdentity $user, $res ) {
 		$path = null;
 
 		// If user exists
@@ -59,11 +60,11 @@ class Avatar {
 		return $path;
 	}
 
-	public static function hasAvatar( User $user ) {
+	public static function hasAvatar( UserIdentity $user ) {
 		return self::getAvatar( $user, 'original' ) !== null;
 	}
 
-	public static function createIdenticon( User $user, $res ) {
+	public static function createIdenticon( UserIdentity $user, $res ) {
 		global $wgMaxAvatarResolution;
 		global $wgAvatarUploadDirectory;
 		$uploadDir = $wgAvatarUploadDirectory . '/' . $user->getId() . '/';
@@ -76,7 +77,7 @@ class Avatar {
 		return "/{$user->getId()}/$res.png";
 	}
 
-	public static function deleteAvatar( User $user ) {
+	public static function deleteAvatar( UserIdentity $user ) {
 		global $wgAvatarUploadDirectory;
 		$dirPath = $wgAvatarUploadDirectory . "/{$user->getId()}/";
 		if ( !is_dir( $dirPath ) ) {
