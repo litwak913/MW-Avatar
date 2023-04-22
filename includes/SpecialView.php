@@ -5,10 +5,10 @@ use FormOptions;
 use HTMLForm;
 use ManualLogEntry;
 use MediaWiki\MediaWikiServices;
+use OOUI\MessageWidget;
 use PermissionsError;
 use SpecialPage;
 use Xml;
-use OOUI\MessageWidget;
 
 class SpecialView extends SpecialPage {
 
@@ -51,7 +51,7 @@ class SpecialView extends SpecialPage {
 			// Delete avatar if the user exists
 			if ( $userExists ) {
 				if ( Avatar::deleteAvatar( $userObj ) ) {
-					$this->displayMessage($this->msg( 'viewavatar-delete-done',$userObj->getName() ),'success');
+					$this->displayMessage( $this->msg( 'viewavatar-delete-done', $userObj->getName() ), 'success' );
 					$logInRC = $this->getConfig()->get( 'AvatarLogInRC' );
 					$logEntry = new ManualLogEntry( 'avatar', 'delete' );
 					$logEntry->setPerformer( $this->getUser() );
@@ -80,10 +80,10 @@ class SpecialView extends SpecialPage {
 					$this->showDeleteForm( $user );
 				}
 			} else {
-				$this->displayMessage($this->msg( 'viewavatar-noavatar' )->text(),'warning');
+				$this->displayMessage( $this->msg( 'viewavatar-noavatar' )->text(), 'warning' );
 			}
 		} elseif ( $user ) {
-			$this->displayMessage($this->msg( 'viewavatar-nouser' )->text(),'warning');
+			$this->displayMessage( $this->msg( 'viewavatar-nouser' )->text(), 'warning' );
 		}
 	}
 
@@ -123,8 +123,9 @@ class SpecialView extends SpecialPage {
 			->prepareForm()
 			->displayForm( false );
 	}
-	private function displayMessage( $msg ,$type) {
-		$message=new MessageWidget(['type'=>$type,'label'=>$msg]);
+
+	private function displayMessage( $msg, $type ) {
+		$message = new MessageWidget( [ 'type' => $type,'label' => $msg ] );
 		$this->getOutput()->addHTML( $message );
 	}
 }

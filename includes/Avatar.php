@@ -4,7 +4,6 @@ namespace MediaWiki\Extension\Avatar;
 use Identicon;
 use MediaWiki\User\UserIdentity;
 use SpecialPage;
-use User;
 
 class Avatar {
 

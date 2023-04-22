@@ -21,10 +21,10 @@ class SpecialAvatar extends UnlistedSpecialPage {
 		}
 		if ( isset( $query['wpUsername'] ) ) {
 			$username = $query['wpUsername'];
-			$user = MediaWikiServices::getInstance()->getUserIdentityLookup()->getUserIdentityByName($username);
-		} elseif (isset( $query['wpUserID'] )){
+			$user = MediaWikiServices::getInstance()->getUserIdentityLookup()->getUserIdentityByName( $username );
+		} elseif ( isset( $query['wpUserID'] ) ) {
 			$uid = $query['wpUserID'];
-			$user = MediaWikiServices::getInstance()->getUserIdentityLookup()->getUserIdentityByUserId($uid);
+			$user = MediaWikiServices::getInstance()->getUserIdentityLookup()->getUserIdentityByUserId( $uid );
 		} else {
 			wfHttpError( 400, 'Bad Request', 'Missing parameter wpUsername or wpUserID.' );
 			return;

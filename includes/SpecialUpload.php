@@ -44,13 +44,13 @@ class SpecialUpload extends UnlistedSpecialPage {
 				$this->getOutput()->redirect( SpecialPage::getTitleFor( 'Preferences' )->getLinkURL() );
 			}
 		} else {
-			//$this->displayMessage( '' );
+			// $this->displayMessage( '' );
 		}
 		$this->displayNewForm();
 	}
 
 	private function displayMessage( $msg ) {
-		$message=new MessageWidget(['type'=>'error','label'=>$msg]);
+		$message = new MessageWidget( [ 'type' => 'error','label' => $msg ] );
 		$this->getOutput()->addHTML( $message );
 	}
 
