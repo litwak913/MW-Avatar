@@ -17,16 +17,24 @@
 
 	// Objects
 	const $submitButton = OO.ui.infuse( $( '#submit-button' ) );
-	const $currentAvatar = $( '<div>' ).append( $.html( '<img class="current-avatar"></img>' ).attr( 'src', mw.config.get( 'wgScriptPath' ) + '/index.php?title=Special:Avatar&wpUsername=' + mw.user.id() + '&wpRes=original&wpNocache&wpVer=' + Math.floor( Date.now() / 1000 ).toString( 16 ) ) );
-	const $container = $.html( '<div class="cropper-container" disabled=""></div>' );
-	const $imageObj = $.html( '<img src=""></img>' );
-	const $selector = $.html( '<div class="cropper"><div class="tl-resizer"></div><div class="tr-resizer"></div><div class="bl-resizer"></div><div class="br-resizer"></div><div class="round-preview"></div></div>' );
+	const $currentAvatar = $( '<div>' ).append( $( '<img>' ).addClass( 'current-avatar' ).attr( 'src', mw.config.get( 'wgScriptPath' ) + '/index.php?title=Special:Avatar&wpUsername=' + mw.user.id() + '&wpRes=original&wpNocache&wpVer=' + Math.floor( Date.now() / 1000 ).toString( 16 ) ) );
+	const $container = $( '<div>' ).addClass( 'cropper-container' ).attr( 'disabled', '' );
+	const $imageObj = $( '<img>' );
+	const $selector = buildSelector();
 	const $msgBelow = $( '<p>' ).text( mw.msg( 'uploadavatar-nofile' ) );
 	const $hiddenField = $( '[name=wpAvatar]' );
 	const $pickfile = OO.ui.infuse( $( '#select-button' ) );
 	const $errorMsg = $( '#errorMsg' );
 	const $roundPreview = $selector.find( '.round-preview' );
-
+	function buildSelector() {
+		const $div = $( '<div>' ).addClass( 'cropper' );
+		$div.append( $( '<div>' ).addClass( 'tl-resizer' ) );
+		$div.append( $( '<div>' ).addClass( 'tr-resizer' ) );
+		$div.append( $( '<div>' ).addClass( 'bl-resizer' ) );
+		$div.append( $( '<div>' ).addClass( 'br-resizer' ) );
+		$div.append( $( '<div>' ).addClass( 'round-preview' ) );
+		return $div;
+	}
 	// Helper function to limit the selection clip
 	function normalizeBound( inner, outer ) {
 		if ( inner.left < outer.left ) {
@@ -277,7 +285,7 @@
 	} );
 
 	$pickfile.on( 'click', function () {
-		const $picker = $.html( '<input type="file"></input>' );
+		const $picker = $( '<input>' ).attr( 'type', 'file' );
 		$picker.on( 'change', function ( event ) {
 			const file = event.target.files[ 0 ];
 			if ( file ) {
