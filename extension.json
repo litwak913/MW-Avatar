@@ -30,10 +30,10 @@
 				"oojs-ui-core",
 				"oojs-ui.styles.icons-content"
 			],
-			"scripts":[
+			"scripts": [
 				"assets/upload.js"
 			],
-			"styles":[
+			"styles": [
 				"assets/upload.css"
 			],
 			"messages": [
@@ -82,7 +82,7 @@
 	"config": {
 		"DefaultAvatar": "IDENTICON",
 		"MaxAvatarResolution": 256,
-		"AllowedAvatarRes": [64, 128], 
+		"AllowedAvatarRes": [ 64, 128 ],
 		"DefaultAvatarRes": 128,
 		"UseAvatar": true,
 		"VersionAvatar": false,
