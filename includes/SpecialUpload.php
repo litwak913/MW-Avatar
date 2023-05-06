@@ -3,6 +3,7 @@ namespace MediaWiki\Extension\Avatar;
 
 use Html;
 use ManualLogEntry;
+use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\MediaWikiServices;
 use OOUI;
 use OOUI\MessageWidget;
@@ -13,9 +14,11 @@ use UserBlockedError;
 use Xml;
 
 class SpecialUpload extends UnlistedSpecialPage {
+	private HookContainer $hooks;
 
-	public function __construct() {
+	public function __construct( HookContainer $hookContainer ) {
 		parent::__construct( 'UploadAvatar' );
+		$this->hooks = $hookContainer;
 	}
 
 	public function execute( $par ) {
@@ -58,15 +61,15 @@ class SpecialUpload extends UnlistedSpecialPage {
 		$config = $this->getConfig();
 		$request = $this->getRequest();
 		$dataurl = $request->getVal( 'wpAvatar' );
+		$user = $this->getUser();
 		if ( !$dataurl || parse_url( $dataurl, PHP_URL_SCHEME ) !== 'data' ) {
 			$this->displayMessage( $this->msg( 'avatar-notuploaded' ) );
 			return false;
 		}
-
+		$this->hooks->run( 'BeforeUploadAvatar', [ $user,&$dataurl ] );
 		$img = AvatarThumbnail::open( $dataurl );
 
 		$maxAvatarResolution = $config->get( 'MaxAvatarResolution' );
-
 		switch ( $img->type ) {
 		case IMAGETYPE_GIF:
 		case IMAGETYPE_PNG:
@@ -95,7 +98,6 @@ class SpecialUpload extends UnlistedSpecialPage {
 			return false;
 		}
 
-		$user = $this->getUser();
 		Avatar::deleteAvatar( $user );
 
 		// Avatar directories
@@ -110,7 +112,7 @@ class SpecialUpload extends UnlistedSpecialPage {
 		$img->createThumbnail( $defaultAvatarRes, $uploadDir . $defaultAvatarRes . '.png' );
 
 		$img->cleanup();
-
+		$this->hooks->run( 'AfterUploadAvatar', [ $user ] );
 		$this->displayMessage( $this->msg( 'avatar-saved' ) );
 
 		// global $wgAvatarLogInRC;

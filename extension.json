@@ -56,7 +56,12 @@
 		"remoteExtPath": "Avatar"
 	},
 	"SpecialPages": {
-		"UploadAvatar": "MediaWiki\\Extension\\Avatar\\SpecialUpload",
+		"UploadAvatar": {
+			"class": "MediaWiki\\Extension\\Avatar\\SpecialUpload",
+			"services": [
+				"HookContainer"
+			]
+		},
 		"ViewAvatar": "MediaWiki\\Extension\\Avatar\\SpecialView",
 		"Avatar": "MediaWiki\\Extension\\Avatar\\SpecialAvatar"
 	},
