@@ -16,7 +16,6 @@
 	},
 	"Hooks": {
 		"GetPreferences": "MediaWiki\\Extension\\Avatar\\Hooks::onGetPreferences",
-		"BaseTemplateToolbox": "MediaWiki\\Extension\\Avatar\\Hooks::onBaseTemplateToolbox",
 		"SidebarBeforeOutput": "MediaWiki\\Extension\\Avatar\\Hooks::onSidebarBeforeOutput",
 		"ParserFirstCallInit": "MediaWiki\\Extension\\Avatar\\Hooks::onParserFirstCallInit"
 	},

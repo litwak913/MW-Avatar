@@ -42,20 +42,13 @@ class Hooks {
 		$user = $skin->getRelevantUser();
 
 		if ( $user ) {
-			$sidebar['TOOLBOX'][] = [
+			$sidebar['TOOLBOX']['viewavatar'] = [
+				'id' => 't-viewavatar',
 				'text' => wfMessage( 'sidebar-viewavatar' )->text(),
 				'href' => SpecialPage::getTitleFor( 'ViewAvatar' )->getLocalURL( [
 					'wpUsername' => $user->getName(),
 				] ),
 			];
-		}
-	}
-
-	public static function onBaseTemplateToolbox( BaseTemplate &$baseTemplate, array &$toolbox ) {
-		if ( isset( $baseTemplate->data['nav_urls']['viewavatar'] )
-			&& $baseTemplate->data['nav_urls']['viewavatar'] ) {
-			$toolbox['viewavatar'] = $baseTemplate->data['nav_urls']['viewavatar'];
-			$toolbox['viewavatar']['id'] = 't-viewavatar';
 		}
 	}
 
