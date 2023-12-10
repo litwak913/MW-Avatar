@@ -1,12 +1,14 @@
 <?php
 namespace MediaWiki\Extension\Avatar;
 
-use MediaWiki\MediaWikiServices;
+use MediaWiki\User\UserIdentityLookup;
 use UnlistedSpecialPage;
 
 class SpecialAvatar extends UnlistedSpecialPage {
-	public function __construct() {
+	private $uil;
+	public function __construct(UserIdentityLookup $uil) {
 		parent::__construct( 'Avatar' );
+		$this->uil=$uil;
 	}
 
 	public function execute( $par ) {
@@ -21,10 +23,10 @@ class SpecialAvatar extends UnlistedSpecialPage {
 		}
 		if ( isset( $query['wpUsername'] ) ) {
 			$username = $query['wpUsername'];
-			$user = MediaWikiServices::getInstance()->getUserIdentityLookup()->getUserIdentityByName( $username );
+			$user = $this->uil->getUserIdentityByName( $username );
 		} elseif ( isset( $query['wpUserID'] ) ) {
 			$uid = $query['wpUserID'];
-			$user = MediaWikiServices::getInstance()->getUserIdentityLookup()->getUserIdentityByUserId( $uid );
+			$user = $this->uil->getUserIdentityByUserId( $uid );
 		} else {
 			wfHttpError( 400, 'Bad Request', 'Missing parameter wpUsername or wpUserID.' );
 			return;
